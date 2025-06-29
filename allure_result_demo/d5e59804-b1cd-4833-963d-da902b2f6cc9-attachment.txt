@@ -1,4 +1,0 @@
-报告路径: D:\devops\JokerAIRunner\midscene_run\report\test_web_joker_homepage-2025-06-29_22-43-28-n5ccb8wd.html
-可以通过以下方式查看完整报告:
-1. 在Allure报告中点击上方的HTML附件
-2. 直接打开文件: D:\devops\JokerAIRunner\midscene_run\report\test_web_joker_homepage-2025-06-29_22-43-28-n5ccb8wd.html
