@@ -107,3 +107,7 @@ python - m pytest .\testcases\api
 ```python
 python - m pytest .\testcases\UI
 ```
+
+### 感谢开源项目
+- [HttpRunner](https://github.com/httprunner/httprunner)
+- [MidScene](https://github.com/web-infra-dev/midscene)
