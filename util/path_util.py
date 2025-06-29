@@ -1,0 +1,79 @@
+import logging
+import os
+from typing import Text
+
+from util.time_util import get_today_date
+
+
+def root_path():
+    """ 获取 根路径 """
+    path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return path
+
+
+def ensure_path_sep(path: Text) -> Text:
+    """兼容 windows 和 linux 不同环境的操作系统路径 """
+    if "/" in path:
+        path = os.sep.join(path.split("/"))
+
+    if "\\" in path:
+        path = os.sep.join(path.split("\\"))
+
+    return root_path() + path
+
+
+def get_config_path(name="config.yml"):
+    # root_path + config + config.yml 三个路径拼接
+    return os.path.join(root_path(), "config", name)
+
+
+def get_token_path(name="token.yml"):
+    """获取C端token文件路径"""
+    # 如果文件不存在，则创建文件
+    if not os.path.exists(os.path.join(root_path(), name)):
+        with open(os.path.join(root_path(), name), "w") as f:
+            f.write("token: \n")
+    return os.path.join(root_path(), name)
+
+def get_token_path_bussiness(name="token_bussiness.yml"):
+    """获取C端token文件路径"""
+    # 如果文件不存在，则创建文件
+    if not os.path.exists(os.path.join(root_path(), name)):
+        with open(os.path.join(root_path(), name), "w") as f:
+            f.write("token: \n")
+    return os.path.join(root_path(), name)
+
+
+def get_allure_html_report_path():
+    # 获取allure结果路径：allure_report
+    try:
+        allure_report_path = os.path.join(root_path(), "allure_report")
+        return allure_report_path
+    except Exception as e:
+        logging.error(f"获取allure_html_report_path失败：{e}, 请检查报告路径是否存在！")
+
+
+def get_allure_result_path():
+    # 获取allure结果路径：allure_result
+    try:
+        allure_result_path = os.path.join(root_path(), "allure_result")
+        return allure_result_path
+    except Exception as e:
+        logging.error(f"获取allure_result_path失败：{e}, 请检查结果路径是否存在！")
+
+
+def get_allure_report_summary_path():
+    # 获取allure结果路径：allure_report/{20240415}/widgets/summary.json
+    # 获取当前日期字符串时间
+    today_str = get_today_date()
+    try:
+        allure_report_path = os.path.join(root_path(), "allure_report", today_str, "widgets", "summary.json")
+        logging.warning(f"获取allure_report_summary_path成功：{allure_report_path}")
+        return allure_report_path
+    except Exception as e:
+        logging.error(f"获取allure_report_summary_path失败：{e}, 请检查报告数据是否正确生成")
+
+
+if __name__ == '__main__':
+    # print(get_config_path("config.yml"))
+    get_allure_report_summary_path()

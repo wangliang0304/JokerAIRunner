@@ -1,0 +1,11 @@
+android:
+  launch: https://www.joker.pw
+  deviceId: "0826337218000060"
+
+tasks:
+  - name: 打开第一个工具
+    flow:
+      - ai: 打开浏览器并导航到 https://www.joker.pw/
+      - ai: 找到第一个工具卡片，点击按钮：【立即使用】
+      - sleep: 3000
+      - aiAssert: 第一个工具页面有正常打开

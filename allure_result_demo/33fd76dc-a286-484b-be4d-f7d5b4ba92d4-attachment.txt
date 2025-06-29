@@ -1,0 +1,127 @@
+2025-06-29 22:44:04.650 | INFO | run step begin: 代理状态 >>>>>>
+2025-06-29 22:44:04.652 | INFO | call hook actions: setup request
+2025-06-29 22:44:04.653 | DEBUG | call hook function: ${setup_hooks_request($request)}
+2025-06-29 22:44:04.672 | DEBUG | ====== request details ======
+url: https://ng-apptest.transspay.net/api/online-agent-product/agent/status
+method: GET
+params: {
+    "categoryId": "10"
+}
+data: None
+cookies: {}
+timeout: 120
+allow_redirects: True
+verify: False
+headers: {
+    "accept-encoding": "gzip",
+    "content-type": "application/json",
+    "if-modified-since": "Tue, 07 May 2024 11:26:34 GMT",
+    "pp_channel": "googleplay",
+    "pp_client_ver": "5.3.0&603020703",
+    "pp_device_id": "bee648d4b0a5ab70012345",
+    "pp_device_type": "ANDROID",
+    "pp_req_sign": "ukP/Ys/kya0tDwWsJpWllRxRtMnPB4Z%2BZDXAPeZgxgcfrkzU3rwy6GDD%2BUgZAxs85CdbDGCncr0toPy3VADjDO2n72dZSEFHSB5e0doRtd8CfktttSu%2B4buMGKAd5ejpHJISOK2HGFjhEPstcjwU5Bm5leEZCCJc7frT3SbKgxc%3D",
+    "pp_timestamp": "1751208244654",
+    "pp_token": "2b2d00f7-e32e-40b2-b71d-5343d07529a7",
+    "user-agent": "PalmPay/5.7.0&604181603 (Android 13)",
+    "HRUN-Request-ID": "HRUN-1757c2ad-5695-492c-b9ba-bdba2d8cf650-244652",
+    "multi_env": "wl",
+    "pp_req_sign_2": "ukP/Ys/kya0tDwWsJpWllRxRtMnPB4Z%2BZDXAPeZgxgcfrkzU3rwy6GDD%2BUgZAxs85CdbDGCncr0toPy3VADjDO2n72dZSEFHSB5e0doRtd8CfktttSu%2B4buMGKAd5ejpHJISOK2HGFjhEPstcjwU5Bm5leEZCCJc7frT3SbKgxc%3D"
+}
+json: None
+
+2025-06-29 22:44:05.573 | DEBUG | client IP: 10.130.160.126, Port: 52868
+2025-06-29 22:44:05.576 | DEBUG | server IP: 8.209.98.198, Port: 443
+2025-06-29 22:44:05.580 | DEBUG | 
+================== request details ==================
+method   : MethodEnum.GET
+url      : https://ng-apptest.transspay.net/api/online-agent-product/agent/status?categoryId=10
+headers  : {
+    "user-agent": "PalmPay/5.7.0&604181603 (Android 13)",
+    "accept-encoding": "gzip",
+    "Accept": "*/*",
+    "Connection": "keep-alive",
+    "content-type": "application/json",
+    "if-modified-since": "Tue, 07 May 2024 11:26:34 GMT",
+    "pp_channel": "googleplay",
+    "pp_client_ver": "5.3.0&603020703",
+    "pp_device_id": "bee648d4b0a5ab70012345",
+    "pp_device_type": "ANDROID",
+    "pp_req_sign": "ukP/Ys/kya0tDwWsJpWllRxRtMnPB4Z%2BZDXAPeZgxgcfrkzU3rwy6GDD%2BUgZAxs85CdbDGCncr0toPy3VADjDO2n72dZSEFHSB5e0doRtd8CfktttSu%2B4buMGKAd5ejpHJISOK2HGFjhEPstcjwU5Bm5leEZCCJc7frT3SbKgxc%3D",
+    "pp_timestamp": "1751208244654",
+    "pp_token": "2b2d00f7-e32e-40b2-b71d-5343d07529a7",
+    "HRUN-Request-ID": "HRUN-1757c2ad-5695-492c-b9ba-bdba2d8cf650-244652",
+    "multi_env": "wl",
+    "pp_req_sign_2": "ukP/Ys/kya0tDwWsJpWllRxRtMnPB4Z%2BZDXAPeZgxgcfrkzU3rwy6GDD%2BUgZAxs85CdbDGCncr0toPy3VADjDO2n72dZSEFHSB5e0doRtd8CfktttSu%2B4buMGKAd5ejpHJISOK2HGFjhEPstcjwU5Bm5leEZCCJc7frT3SbKgxc%3D"
+}
+cookies  : {}
+body     : None
+
+2025-06-29 22:44:05.581 | DEBUG | 
+================== response details ==================
+status_code : 200
+headers  : {
+    "Date": "Sun, 29 Jun 2025 14:44:05 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "559",
+    "Connection": "keep-alive",
+    "eagleeye-traceid": "eaac16247117512082455712371d0001",
+    "x-envoy-upstream-service-time": "36",
+    "bkrt": "35"
+}
+cookies  : {}
+encoding : utf-8
+content_type : application/json
+body     : {
+    "respCode": "00000000",
+    "respMsg": "success",
+    "data": {
+        "memberId": "A12D79F816C144B593703ECFFE53F319",
+        "isWhiteListMember": true,
+        "agentLevel": 1,
+        "levelDesc": "Your agent level will be on First Level when your transaction amount of Airtime、Data、Betting、Electricity、TV is more than N1200.\nThe commission rate of First Level as follow：\nAirtime up to 1%；\nData up to 1%；\nBetting up to 1%；\nElectricity up to 1%；\nTV up to 1%",
+        "agentStatus": 1,
+        "agentType": 1,
+        "logo": null,
+        "tips": "Become PalmPay Plus, earn commission.",
+        "agentState": "Lagos"
+    },
+    "status": true
+}
+
+2025-06-29 22:44:05.583 | INFO | status_code: 200, response_time(ms): 896.42 ms, response_length: 0 bytes
+2025-06-29 22:44:05.585 | DEBUG | ====== response details ======
+status_code: 200
+headers: {
+    "Date": "Sun, 29 Jun 2025 14:44:05 GMT",
+    "Content-Type": "application/json",
+    "Content-Length": "559",
+    "Connection": "keep-alive",
+    "eagleeye-traceid": "eaac16247117512082455712371d0001",
+    "x-envoy-upstream-service-time": "36",
+    "bkrt": "35"
+}
+body: {
+    "respCode": "00000000",
+    "respMsg": "success",
+    "data": {
+        "memberId": "A12D79F816C144B593703ECFFE53F319",
+        "isWhiteListMember": true,
+        "agentLevel": 1,
+        "levelDesc": "Your agent level will be on First Level when your transaction amount of Airtime、Data、Betting、Electricity、TV is more than N1200.\nThe commission rate of First Level as follow：\nAirtime up to 1%；\nData up to 1%；\nBetting up to 1%；\nElectricity up to 1%；\nTV up to 1%",
+        "agentStatus": 1,
+        "agentType": 1,
+        "logo": null,
+        "tips": "Become PalmPay Plus, earn commission.",
+        "agentState": "Lagos"
+    },
+    "status": true
+}
+
+2025-06-29 22:44:05.587 | INFO | assert status_code equal 200(int)	==> pass
+2025-06-29 22:44:05.588 | INFO | assert body.respCode equal 00000000(str)	==> pass
+2025-06-29 22:44:05.589 | INFO | assert body.respMsg equal success(str)	==> pass
+2025-06-29 22:44:05.593 | INFO | assert body.status equal True(bool)	==> pass
+2025-06-29 22:44:05.594 | INFO | run step end: 代理状态 <<<<<<
+
+2025-06-29 22:44:05.595 | INFO | generate testcase log: D:\httprunner\demo\logs\1757c2ad-5695-492c-b9ba-bdba2d8cf650.run.log

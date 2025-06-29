@@ -1,0 +1,28 @@
+====== request details ======
+url: https://ng-apptest.transspay.net/api/online-agent-product/agent/status
+method: GET
+params: {
+    "categoryId": "10"
+}
+data: None
+cookies: {}
+timeout: 120
+allow_redirects: True
+verify: False
+headers: {
+    "accept-encoding": "gzip",
+    "content-type": "application/json",
+    "if-modified-since": "Tue, 07 May 2024 11:26:34 GMT",
+    "pp_channel": "googleplay",
+    "pp_client_ver": "5.3.0&603020703",
+    "pp_device_id": "bee648d4b0a5ab70012345",
+    "pp_device_type": "ANDROID",
+    "pp_req_sign": "ukP/Ys/kya0tDwWsJpWllRxRtMnPB4Z%2BZDXAPeZgxgcfrkzU3rwy6GDD%2BUgZAxs85CdbDGCncr0toPy3VADjDO2n72dZSEFHSB5e0doRtd8CfktttSu%2B4buMGKAd5ejpHJISOK2HGFjhEPstcjwU5Bm5leEZCCJc7frT3SbKgxc%3D",
+    "pp_timestamp": "1751208244654",
+    "pp_token": "2b2d00f7-e32e-40b2-b71d-5343d07529a7",
+    "user-agent": "PalmPay/5.7.0&604181603 (Android 13)",
+    "HRUN-Request-ID": "HRUN-1757c2ad-5695-492c-b9ba-bdba2d8cf650-244652",
+    "multi_env": "wl",
+    "pp_req_sign_2": "ukP/Ys/kya0tDwWsJpWllRxRtMnPB4Z%2BZDXAPeZgxgcfrkzU3rwy6GDD%2BUgZAxs85CdbDGCncr0toPy3VADjDO2n72dZSEFHSB5e0doRtd8CfktttSu%2B4buMGKAd5ejpHJISOK2HGFjhEPstcjwU5Bm5leEZCCJc7frT3SbKgxc%3D"
+}
+json: None

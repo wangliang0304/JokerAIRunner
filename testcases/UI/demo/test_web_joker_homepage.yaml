@@ -1,0 +1,9 @@
+web:
+  url: https://www.joker.pw
+
+tasks:
+  - name: 点击第一个卡片
+    flow:
+      - ai: 点击第一个卡片的按钮："立即使用"
+      - sleep: 3000
+      - aiAssert: 第一个的卡片页面正常打开

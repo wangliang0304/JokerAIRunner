@@ -1,0 +1,25 @@
+reports/
+results/
+report/
+*.so
+.vscode/
+.idea/
+.DS_Store
+output/
+__pycache__/
+*.pyc
+.python-version
+logs/
+token.yml
+token_bussiness.yml
+
+# plugin
+debugtalk.bin
+debugtalk.so
+allure_report/
+allure_result/
+/.pytest_cache/
+har/
+
+# Midscene.js dump files
+midscene_run/
