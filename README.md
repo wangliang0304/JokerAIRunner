@@ -8,6 +8,9 @@
 如果你在一个规模不大的公司，如果你认为python是最高效的语言，如果同时你还在积极探索AI在测试自动化的应用，
 那么恭喜，你找到了一个适合你的自动化测试框架。
 
+⭐ 每一个Star都是对创作者的鼓励，也是让更多人发现并受益于[JokerAIRunner]的机会 
+⭐ 今天你的支持，就是我们明天前进的动力
+
 - api用例demo
 ```python
 class TestAgentStatusTest(HttpRunner):
