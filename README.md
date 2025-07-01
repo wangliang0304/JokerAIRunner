@@ -1,4 +1,7 @@
 ### 人生苦短，我用python。
+分享开源这个工具的初衷（详见下面文章链接）：
+
+https://mp.weixin.qq.com/s/tdZ5_VcKjCItgTgD7lfUPA
 
 - AI驱动的自动化。
 - 配置即编程，配置即自动化。
@@ -114,3 +117,10 @@ python - m pytest .\testcases\UI
 ### 感谢开源项目
 - [HttpRunner](https://github.com/httprunner/httprunner)
 - [MidScene](https://github.com/web-infra-dev/midscene)
+
+### 联系作者
+- 微信公众号：jokerceshi666
+<div style="width: 150px">
+
+![微信二维码](img/joker_wx.PNG)
+</div>
