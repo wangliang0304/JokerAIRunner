@@ -23,3 +23,4 @@ har/
 
 # Midscene.js dump files
 midscene_run/
+.env
