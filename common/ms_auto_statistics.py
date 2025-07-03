@@ -67,15 +67,16 @@ class MeterSphere:
         headers = {'Content-Type': 'application/json', 'ACCEPT': 'application/json'}
         headers.update(get_headers(self.access_key, self.secret_key))
 
-        logging.warning("request url: %s", url)
-        logging.warning("request headers: %s", headers)
+        logging.debug("请求URL: %s", url)
         if body:
             resp = requests.post(url, headers=headers, json=body)
         else:
             resp = requests.get(url, headers=headers)
 
-        logging.warning("Response status: %s", resp.status_code)
-        logging.warning("Response body: %s", resp.text)
+        if resp.status_code == 200:
+            logging.info("自动化平台API调用成功")
+        else:
+            logging.error("自动化平台API调用失败，状态码: %s", resp.status_code)
         return resp.json()
 
     def post_factory_api(self):
@@ -85,12 +86,12 @@ class MeterSphere:
             "mode": "run",
             "env": "TEST"
         })
-        logging.warning("post_factory_api: %s", res)
+        logging.info("自动化数据统计接口调用完成")
         return res
 
     def get_autocase(self):
         res = self._request('/dashboards/scenario?startTime=2025-03-31&endTime=2025-04-07')
-        logging.warning("get autocase的数据: %s", res)
+        logging.info("获取自动化用例数据完成")
         return res
 
 if __name__ == '__main__':

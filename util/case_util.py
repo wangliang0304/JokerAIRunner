@@ -29,15 +29,13 @@ def case_step_split():
         # 正则筛选出get或post的请求url，并根据path路径处理新生成的文件和测试类
         # 匹配数据可能出现漏的情况 \s* 解决空格和换行的影响
         url_match = re.search(r'\.get\(\s*"(.*?)"\s*\)|\.post\(\s*"(.*?)"\s*\)', step, re.IGNORECASE | re.DOTALL)
-        print("url_match:", url_match)
+        logging.debug("正在解析URL匹配")
         if url_match:
             url = url_match.group(1) or url_match.group(2)
-            logging.info(f"解析出的url为：{url}")
-            print(f"解析出的url为：{url}")
+            logging.info(f"解析URL成功：{url}")
             # 提取path
             path = extract_path_from_url(url)
-            logging.info(f"提取的path为：{path}")
-            print(f"提取的path为：{path}")
+            logging.info(f"提取路径成功：{path}")
             path_parts = path.split('/')
             # step内容中 url 替换为 path
             step = step.replace(url, path)
@@ -51,12 +49,12 @@ def case_step_split():
             if match:
                 # method_type = match.group(1)  # 获取匹配到的方法类型（get 或者 post）
                 matched_text = match.group()  # 获取匹配到的文本内容
-                print(f"匹配到的文本内容：{matched_text}")
+                logging.debug("匹配RunRequest方法成功")
                 modified_text = matched_text + ".setup_hook('${setup_hooks_request($request)}')"  # 在匹配到的文本后增加 .setup(xx) 部分
 
                 # 替换原文本中的匹配部分
                 step = re.sub(pattern, modified_text, step)
-                print(f"step处理后的部分：{step}")
+                logging.debug("Step处理完成")
 
             # 处理文件名和类名
             if len(path_parts) >= 2:

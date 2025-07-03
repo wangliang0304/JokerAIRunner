@@ -50,7 +50,7 @@ def get_allure_html_report_path():
         allure_report_path = os.path.join(root_path(), "allure_report")
         return allure_report_path
     except Exception as e:
-        logging.error(f"获取allure_html_report_path失败：{e}, 请检查报告路径是否存在！")
+        logging.error(f"获取Allure报告路径失败：{e}")
 
 
 def get_allure_result_path():
@@ -59,7 +59,7 @@ def get_allure_result_path():
         allure_result_path = os.path.join(root_path(), "allure_result")
         return allure_result_path
     except Exception as e:
-        logging.error(f"获取allure_result_path失败：{e}, 请检查结果路径是否存在！")
+        logging.error(f"获取Allure结果路径失败：{e}")
 
 
 def get_allure_report_summary_path():
@@ -68,10 +68,10 @@ def get_allure_report_summary_path():
     today_str = get_today_date()
     try:
         allure_report_path = os.path.join(root_path(), "allure_report", today_str, "widgets", "summary.json")
-        logging.warning(f"获取allure_report_summary_path成功：{allure_report_path}")
+        logging.debug("获取Allure报告摘要路径成功")
         return allure_report_path
     except Exception as e:
-        logging.error(f"获取allure_report_summary_path失败：{e}, 请检查报告数据是否正确生成")
+        logging.error(f"获取Allure报告摘要路径失败：{e}")
 
 
 if __name__ == '__main__':

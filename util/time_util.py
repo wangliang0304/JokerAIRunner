@@ -19,7 +19,8 @@ def get_today_date():
     return time.strftime('%Y%m%d', time.localtime(time.time()))
 
 if __name__ == '__main__':
-    # 查看返回类型
-    print(type(get_today_date()))
-    # 查看返回值
-    print(get_today_date())
+    # 测试代码
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    logging.info(f"当前日期：{get_today_date()}")
+    logging.info(f"时间戳：{get_timestamp()}")

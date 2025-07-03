@@ -61,9 +61,9 @@ def allure_report():
     # 删除冗余的allure结果和allure report报告
     fileUtilTool = FileUtils()
     fileUtilTool.remove_dir(result_root)
-    logging.warning("前置删除result结果")
+    logging.info("清理历史测试结果")
     fileUtilTool.remove_dir(report_root)
-    logging.warning("前置删除report结果")
+    logging.info("清理历史测试报告")
 
     # 执行运营用例的pytest命令
     pytest.main(

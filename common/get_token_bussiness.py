@@ -15,11 +15,11 @@ def get_token_bussiness():
     file = get_token_path_bussiness()
     with open(file, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
-        print(f"获取的data为：{data}")
+        logging.debug("读取B端Token配置")
 
     # 获取第一行数据
     first_line = data.split('\n')[0]
-    print(f"获取的B端token为：{first_line}")
+    logging.debug("获取B端Token成功")
     return first_line
 
 
@@ -94,18 +94,20 @@ def bussiness_login_token():
         "verifyCode": "2580"
     }
     r = requests.post(otp_url, json=otp_body, headers=headers)
-    logging.warning(f"otp接口返回结果：{r.json()}")
+    if r.status_code == 200:
+        logging.info("B端OTP验证成功")
+    else:
+        logging.error("B端OTP验证失败")
     otp_toeken = r.json().get("data").get("securityToken")
-    logging.warning(f"---otp_toeken：{otp_toeken}")
+    logging.debug("获取OTP Token完成")
 
     # B端登录调用
     url = "https://ng-pa-apptest.transspay.net/api/business-bff-product/merchant/micro/user/login"
     body["otpToken"] = otp_toeken   # 替换body中的otpToken
-    logging.warning(f"---替换otpToken后的body：{body}")
+    logging.debug("更新登录请求体")
     response = requests.request("POST", url, headers=headers, json=body)
-    print(response.text)
     token = response.json().get("data").get("token")
-    logging.warning(f"B端：登录获取的token：{token}")
+    logging.info("B端登录成功，Token获取完成")
 
     return token
 

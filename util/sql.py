@@ -1,4 +1,5 @@
 import os
+import logging
 
 import yaml
 from sqlalchemy.dialects.mysql import pymysql
@@ -9,21 +10,21 @@ def connect_database(filepath, sql):
         config_data = open(filepath, 'r', encoding='utf-8')
         res = yaml.load(config_data, Loader=yaml.FullLoader)
     else:
-        raise FileNotFoundError('can`t found File')
+        raise FileNotFoundError('配置文件未找到')
 
-    # print(type(res['sql_db']))
-    # connection = pymysql.connect(host='api.lemonban.com',user='future',password='123456',database='future')
     try:
         connection = pymysql.connect(**res['sql_db'])
+        logging.info("数据库连接成功")
     except Exception as e:
-        raise ConnectionError('链接失败')
+        logging.error(f"数据库连接失败：{e}")
+        raise ConnectionError('数据库连接失败')
 
     try:
         with connection.cursor() as cursor:
             cursor.execute(sql)
             connection.commit()
             result = cursor.fetchone()
-            print(result)
+            logging.info("SQL执行成功")
             return result
     finally:
         # 关闭数据库

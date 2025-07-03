@@ -8,11 +8,9 @@ from util.path_util import get_config_path
 # 读取 YAML 配置文件
 def get_config_content():
     file = get_config_path()
-    # logging.warning("读取配置文件：%s" % file)
+    logging.debug("读取YAML配置文件")
     with open(file, 'r', encoding='utf-8') as file:
         config = yaml.safe_load(file)
-    # 输出配置信息
-    # print(config)
     return config
 
 

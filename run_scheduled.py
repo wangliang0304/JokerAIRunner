@@ -22,7 +22,7 @@ def run_scheduled(scheduled_job, test_paths=None, run_report=True, upload_report
 
     if test_paths:
         # Run specific test paths
-        logging.info(f"Running specific test paths: {test_paths}")
+        logging.info(f"开始执行指定测试路径：{test_paths}")
         today_str = get_today_date()
         result_root = get_allure_result_path()
         report_root = get_allure_html_report_path()
@@ -32,29 +32,29 @@ def run_scheduled(scheduled_job, test_paths=None, run_report=True, upload_report
         # Clean up previous results if needed
         file_util = FileUtils()
         file_util.remove_dir(result_root)
-        logging.info("Removed previous result directory")
+        logging.info("清理历史测试结果目录")
         file_util.remove_dir(report_root)
-        logging.info("Removed previous report directory")
+        logging.info("清理历史测试报告目录")
 
         # Run pytest with specified paths
         pytest.main(['-s', '-v'] + test_paths + ['--alluredir', allure_result, "--clean-alluredir"])
 
         # Generate report if requested
         if run_report:
-            logging.info("Generating Allure report")
+            logging.info("开始生成Allure测试报告")
             cmd = rf"allure generate {allure_result} -o {allure_report_path} --clean"
-            logging.info(f"Running command: {cmd}")
+            logging.debug(f"执行命令：{cmd}")
             exit_code = os.system(cmd)
             if exit_code != 0:
-                logging.error(f"Allure report generation failed with exit code {exit_code}")
+                logging.error(f"Allure报告生成失败，退出码：{exit_code}")
             else:
-                logging.warning("Allure report generated successfully")
+                logging.info("Allure测试报告生成成功")
 
         # Upload report if requested
         if upload_report_flag:
-            logging.info("Uploading report to server")
+            logging.info("开始上传测试报告到服务器")
             upload_report()
     else:
         # Run all tests using run_main
-        logging.info("Running all tests using run_main")
+        logging.info("开始执行全量测试")
         run_main()

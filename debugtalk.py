@@ -71,7 +71,7 @@ def get_pp_timestamp() -> str:
 
 
 def setup_hooks_request(request):
-    logging.warning(f"---step前置的request信息：{request}")
+    logging.debug("正在处理C端请求前置信息")
     # 请求体参数
     body_data = request.get('data') if request.get('data') else request.get('req_json')
     _timestamp = get_pp_timestamp()
@@ -123,7 +123,7 @@ def setup_hooks_request(request):
 
 
 def setup_hooks_request_business(request):
-    logging.warning(f"---B端：step前置的request信息：{request}")
+    logging.debug("正在处理B端请求前置信息")
     # 请求体参数
     body_data = request.get('data') if request.get('data') else request.get('req_json')
     _timestamp = get_pp_timestamp()
@@ -183,7 +183,7 @@ def get_pp_sign(timestamp="", data="", token="", **kwargs):
     :param kwargs:
     :return:
     """
-    logging.warning(f"-------------传入的时间戳：{timestamp}")
+    logging.debug("正在生成RSA签名")
     if data:
         # 请求体加密：sign2
         sign = get_sign(data, **kwargs)
@@ -199,19 +199,21 @@ def get_token_plugin():
 
 
 def setup_hook_example(name):
-    logging.warning("##########setup_hook_example")
+    logging.debug("执行示例前置钩子")
     return f"setup_hook_example: {name}"
 
 
 def setup_hook_session():
+    logging.info("开始初始化会话Token")
     # C端：token预处理
     write_token_to_yml()
     # B端：token预处理
     write_bussiness_token_to_yml()
+    logging.info("会话Token初始化完成")
 
 
 def teardown_hook_example(name):
-    logging.warning("teardown_hook_example")
+    logging.debug("执行示例后置钩子")
     return f"teardown_hook_example: {name}"
 
 

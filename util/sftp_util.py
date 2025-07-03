@@ -1,4 +1,5 @@
 import os
+import logging
 import paramiko
 
 from config.server_config import REMOTE_SERVER_URL, USER_NAME, PASSWORD, REMOTE_PATH
@@ -30,7 +31,7 @@ class SftpUploader:
                         sftp.chdir(remote_path)
                     except IOError:
                         sftp.mkdir(remote_path)
-                        print(f"远程目录 {remote_path} 创建成功")
+                        logging.info(f"远程目录创建成功：{remote_path}")
                 self.upload_files(root, files, local_dir, remote_dir, sftp)
 
     def upload_files(self, root, files, local_dir, remote_dir, sftp):
@@ -38,7 +39,7 @@ class SftpUploader:
             local_path = os.path.join(root, file)
             remote_path = remote_dir + '/' + os.path.relpath(local_path, local_dir).replace('\\', '/')
             sftp.put(local_path, remote_path, confirm=True)  # 添加 confirm=True 参数以直接覆盖已存在文件
-            print(f"文件 {local_path} 已成功上传到 {remote_path}")
+            logging.debug(f"文件上传成功：{file}")
 
 
 if __name__ == '__main__':

@@ -4,8 +4,6 @@
 from httprunner import HttpRunner, Config, Step, RunRequest
 import os
 
-print(f"File real path: {os.path.realpath(__file__)}")
-
 class TestAgentStatusTest(HttpRunner):
     config = Config("step name").base_url("${ENV(base_url_C)}")
 

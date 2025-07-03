@@ -10,14 +10,14 @@ class FileUtils(object):
         """删除文件"""
         try:
             os.remove(file_path)
-            logging.warning(f"File '{file_path}' has been successfully deleted.")
+            logging.info(f"文件删除成功：{file_path}")
         except OSError as e:
-            print(f"Error deleting file: {e}")
+            logging.error(f"文件删除失败：{e}")
 
     def remove_dir(self, dir_path):
         """删除目录"""
         try:
             shutil.rmtree(dir_path)
-            print(f"Directory '{dir_path}' and its contents have been successfully deleted.")
+            logging.info(f"目录删除成功：{dir_path}")
         except OSError as e:
-            print(f"Error deleting directory: {e}")
+            logging.error(f"目录删除失败：{e}")

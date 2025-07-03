@@ -13,11 +13,11 @@ def get_token():
     file = get_token_path()
     with open(file, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
-        print(f"获取的data为：{data}")
+        logging.debug("读取C端Token配置")
 
     # 获取第一行数据
     first_line = data.split('\n')[0]
-    print(f"获取的token为：{first_line}")
+    logging.debug("获取C端Token成功")
     return first_line
 
 
@@ -74,15 +74,14 @@ def pp_login_token():
     headers['pp_timestamp'] = timestamp
     headers['pp_req_sign'] = sign1
     headers['pp_req_sign_2'] = sign2
-    logging.warning(f"headers：{headers}")
+    logging.debug("请求头构建完成")
 
     import requests
 
     url = "https://ng-apptest.transspay.net/api/c-bff-product/start/loginV2"
     response = requests.request("POST", url, headers=headers, json=body)
-    # print(response.text)
     token = response.json().get("data").get("token")
-    logging.warning(f"登录获取的token：{token}")
+    logging.info("C端登录成功，Token获取完成")
 
     return token
 

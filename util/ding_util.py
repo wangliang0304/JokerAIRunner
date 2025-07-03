@@ -36,7 +36,7 @@ def send_ding_msg():
     file_name = get_allure_report_summary_path()
     with open(file_name, 'r', encoding='utf-8') as f:
         data = json.load(f)
-    logging.info(f"获取的allure结果数据为：{data}")
+    logging.info("读取测试报告数据成功")
     case_json = data['statistic']
     case_all = case_json['total']  # 测试用例总数
     case_fail = case_json['failed'] + case_json['broken']  # 失败用例数量（包括broken的用例）
@@ -45,7 +45,7 @@ def send_ding_msg():
         # 计算出来当前失败率
         case_rate = round((case_pass / case_all) * 100, 2)
     else:
-        print('未获取到执行结果')
+        logging.warning('未获取到测试执行结果')
 
     # allure远程在线报告地址
     allure_report_url = f"http://10.130.9.31:10086/{get_today_date()}/index.html"
@@ -69,7 +69,10 @@ def send_ding_msg():
     url = DING_WEBHOOK_URL + f"&timestamp={get_timestamp()}" + f"&sign={get_ding_sign()}"
     headers = {'Content-Type': 'application/json'}
     r = requests.post(url, headers=headers, data=json.dumps(data))
-    print(r.status_code)
+    if r.status_code == 200:
+        logging.info("钉钉消息发送成功")
+    else:
+        logging.error(f"钉钉消息发送失败，状态码：{r.status_code}")
 
 
 if __name__ == '__main__':
