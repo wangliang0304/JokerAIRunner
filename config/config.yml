@@ -9,7 +9,7 @@ sql_db:
 #  PP_DEVICE_ID:"A84076CC-2FC7-47C8-A1B6-0E2F5D693E52"
 #  PP_DEVICE_TYPE:"IOS"
 #  PP_CLIENT_VER:"5.3.0&2402281"
-palmpay:
+pp_app:
   device_id: "bee648d4b0a5ab70012345"
   device_type: "ANDROID"
   device_ver: "5.3.0&603020703"

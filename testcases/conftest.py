@@ -47,7 +47,12 @@ def pytest_configure(config):
 
     allure_dir = config.getoption("--alluredir")
     if allure_dir:
-        allure_env_path = Path(allure_dir) / "environment.properties"
+        # 确保目录存在
+        allure_dir_path = Path(allure_dir)
+        allure_dir_path.mkdir(parents=True, exist_ok=True)
+        
+        # 创建环境属性文件
+        allure_env_path = allure_dir_path / "environment.properties"
         with open(allure_env_path, 'w') as f:
             f.write(f"UI_Framework=MidScene\n")
             f.write(f"API_Framework=HttpRunner\n")

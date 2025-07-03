@@ -1,5 +1,6 @@
 import logging
 import multiprocessing
+import concurrent.futures
 
 import pytest
 import os
@@ -52,11 +53,9 @@ def allure_report():
     allure_result = os.path.join(result_root, today_str)
     allure_report = os.path.join(report_root, today_str)
 
-    # case = ".\\testcases\pp_app\data"
     # 补充支持多个case路径
-    # case = [r"testcases/Bussiness/data/data_itemlist_test.py", r"testcases/Bussiness/data/data_menulist_test.py"]
-    case = [r"testcases/Bussiness", r"testcases/pp_app"]
-    # case = [r"testcases/pp_app"]
+    # case = [r"testcases/api/pp_app/airtime/agent_status_test.py", r"testcases/pp_app"]
+    case = [r"testcases/api/pp_app/airtime/agent_status_test.py"]
 
     # 删除冗余的allure结果和allure report报告
     fileUtilTool = FileUtils()
@@ -71,16 +70,66 @@ def allure_report():
     os.system(rf"allure generate {allure_result} -o {allure_report} --clean")
 
 
-def send_ding_allure_report_main():
-    # 根据当日的最新allure报告发送钉钉消息
-    # 保证报告生成后，才发送邮件
-    a = multiprocessing.Process(target=allure_report)
-    # b = multiprocessing.Process(target=send_ding_msg)
+def run_process(target_func, func_name="未命名函数"):
+    """运行一个进程并等待其完成，返回是否成功"""
+    process = multiprocessing.Process(target=target_func)
+    try:
+        logging.info(f"开始执行{func_name}")
+        process.start()
+        process.join()
+        
+        if process.exitcode == 0:
+            logging.info(f"{func_name}执行成功")
+            return True
+        else:
+            logging.error(f"{func_name}执行失败，退出码: {process.exitcode}")
+            return False
+    except Exception as e:
+        logging.error(f"{func_name}执行异常: {e}")
+        return False
+    finally:
+        # 确保进程被终止
+        if process.is_alive():
+            process.terminate()
+            process.join(timeout=3)
+            if process.is_alive():
+                process.kill()
 
-    a.start()
-    a.join()  # 等待 allure_report 执行完毕
-    # b.start()
-    # b.join()  # 等待 send_ding_msg 执行完毕
+
+def run_sequential_tasks():
+    """按顺序执行多个任务，确保前一个任务成功后再执行下一个"""
+    with multiprocessing.Pool(processes=1) as pool:
+        # 执行报告生成
+        report_result = pool.apply(allure_report)
+        if not report_result:
+            logging.error("报告生成失败，终止后续任务")
+            return False
+            
+        # 执行钉钉消息发送
+        # msg_result = pool.apply(send_ding_msg)
+        # if not msg_result:
+        #     logging.error("钉钉消息发送失败")
+        #     return False
+            
+        return True
+
+def send_ding_allure_report_main():
+    """使用concurrent.futures执行报告生成和消息发送"""
+    with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
+        try:
+            # 提交报告生成任务
+            future = executor.submit(allure_report)
+            # 等待报告生成完成
+            result = future.result()  # 如果allure_report有返回值，可以检查结果
+            
+            # 如果需要发送钉钉消息，取消下面的注释
+            # future = executor.submit(send_ding_msg)
+            # result = future.result()
+            
+            return True
+        except Exception as e:
+            logging.error(f"执行任务时发生异常: {e}")
+            return False
 
 
 def run_main():
