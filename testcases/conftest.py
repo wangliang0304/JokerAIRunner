@@ -7,11 +7,15 @@ import allure
 import pytest
 from loguru import logger
 import os
+from dotenv import load_dotenv
 import re
 from datetime import datetime
 
 from common.get_token import write_token_to_yml
 from common.get_token_bussiness import write_bussiness_token_to_yml
+
+# 加载环境变量
+load_dotenv(".env")
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -45,12 +49,16 @@ def pytest_configure(config):
     """确保所有路径都基于项目根目录，兼容hrp的用例"""
     os.environ["PROJECT_ROOT"] = str(Path(__file__).parent)
 
+    # Store MidScene options in environment variables for later use
+    os.environ["MIDSCENE_HEADED"] = str(config.getoption("--midscene-headed", False))
+    os.environ["MIDSCENE_KEEP_WINDOW"] = str(config.getoption("--midscene-keep-window", False))
+
     allure_dir = config.getoption("--alluredir")
     if allure_dir:
         # 确保目录存在
         allure_dir_path = Path(allure_dir)
         allure_dir_path.mkdir(parents=True, exist_ok=True)
-        
+
         # 创建环境属性文件
         allure_env_path = allure_dir_path / "environment.properties"
         with open(allure_env_path, 'w') as f:
@@ -66,6 +74,12 @@ def pytest_collect_file(parent, file_path):
     if (file_path.suffix == ".yml" or file_path.suffix == ".yaml") and "UI" in file_path.parts:
         return MidSceneFile.from_parent(parent, path=file_path)
     return None
+
+
+def pytest_addoption(parser):
+    """Add MidScene-specific command line options"""
+    parser.addoption("--midscene-headed", action="store_true", help="Run MidScene in headed mode")
+    parser.addoption("--midscene-keep-window", action="store_true", help="Keep browser window open after test")
 
 
 class MidSceneFile(pytest.File):
@@ -114,6 +128,13 @@ class MidSceneItem(pytest.Item):
             str(self.path.resolve()),
             "--report-dir", str(midscene_report_dir)
         ]
+
+        # Add optional parameters based on pytest command line options
+        if os.environ.get("MIDSCENE_HEADED", "False") == "True":
+            command.append("--headed")
+
+        if os.environ.get("MIDSCENE_KEEP_WINDOW", "False") == "True":
+            command.append("--keep-window")
 
         with allure.step(f"执行MidScene命令: {' '.join(command)}"):
             allure.attach(f"运行目录: {project_root}", "信息", allure.attachment_type.TEXT)

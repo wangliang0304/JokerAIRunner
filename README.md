@@ -114,6 +114,19 @@ python - m pytest .\testcases\api
 python - m pytest .\testcases\UI
 ```
 
+兼容UI自动化的展示界面运行：
+```python
+# Run in headed mode
+pytest testcases/UI --midscene-headed
+
+# Keep window open after test
+pytest testcases/UI --midscene-keep-window
+
+# Both options together
+pytest testcases/UI --midscene-headed --midscene-keep-window
+```
+
+
 ### 感谢项目
 - [HttpRunner](https://github.com/httprunner/httprunner)
 - [MidScene](https://github.com/web-infra-dev/midscene)
