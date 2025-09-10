@@ -55,7 +55,10 @@ def allure_report():
 
     # 补充支持多个case路径
     # case = [r"testcases/api/pp_app/airtime/agent_status_test.py", r"testcases/pp_app"]
-    case = [r"testcases/api/pp_app/airtime/agent_status_test.py"]
+    # api demo case 推荐
+    # case = [r"testcases/api/demo/requests_test.py"]
+    # UI demo case 推荐
+    case = [r"testcases/UI/demo/test_web_joker_homepage.yaml"]
 
     # 删除冗余的allure结果和allure report报告
     fileUtilTool = FileUtils()
@@ -140,7 +143,7 @@ def run_main():
     send_ding_allure_report_main()
 
     # 3. 上传allure报告到服务器
-    upload_report()
+    # upload_report()
 
 
 if __name__ == "__main__":

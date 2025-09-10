@@ -123,32 +123,160 @@ class MidSceneItem(pytest.Item):
 
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-        command = [
+        # Build command as a list first
+        command_parts = [
             MIDSCENE_COMMAND,
-            str(self.path.resolve()),
-            "--report-dir", str(midscene_report_dir)
+            str(self.path.resolve())
         ]
 
         # Add optional parameters based on pytest command line options
         if os.environ.get("MIDSCENE_HEADED", "False") == "True":
-            command.append("--headed")
+            command_parts.append("--headed")
 
         if os.environ.get("MIDSCENE_KEEP_WINDOW", "False") == "True":
-            command.append("--keep-window")
+            command_parts.append("--keep-window")
 
-        with allure.step(f"执行MidScene命令: {' '.join(command)}"):
+        # Convert to string for shell execution
+        command = " ".join(command_parts)
+
+        with allure.step(f"执行MidScene命令: {command}"):
             allure.attach(f"运行目录: {project_root}", "信息", allure.attachment_type.TEXT)
             logger.info(f"Running in: {project_root}")
-            logger.info(f"Executing: {' '.join(command)}")
+            logger.info(f"Executing: {command}")
 
             try:
-                result = subprocess.run(
+                # Use Popen for real-time output and better process control
+                import time
+                from threading import Thread
+                import queue
+
+                def read_output(pipe, q, prefix=""):
+                    """Read output from pipe and put into queue"""
+                    try:
+                        for line in iter(pipe.readline, ''):
+                            if line:
+                                q.put((prefix, line.rstrip()))
+                        pipe.close()
+                    except Exception as e:
+                        q.put((prefix, f"Error reading output: {e}"))
+
+                # Start the process
+                process = subprocess.Popen(
                     command,
-                    capture_output=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
                     text=True,
                     shell=True,
                     cwd=str(project_root),
-                    timeout=300,
+                    bufsize=1,
+                    universal_newlines=True
+                )
+
+                # Create queues for output
+                output_queue = queue.Queue()
+
+                # Start threads to read stdout and stderr
+                stdout_thread = Thread(target=read_output, args=(process.stdout, output_queue, "STDOUT"))
+                stderr_thread = Thread(target=read_output, args=(process.stderr, output_queue, "STDERR"))
+
+                stdout_thread.daemon = True
+                stderr_thread.daemon = True
+                stdout_thread.start()
+                stderr_thread.start()
+
+                # Collect output and monitor process
+                all_stdout = []
+                all_stderr = []
+                start_time = time.time()
+                timeout_seconds = 300  # 5 minutes should be enough for UI tests
+                execution_completed = False
+
+                logger.info("MidScene execution started, monitoring output...")
+
+                while True:
+                    # Check if process has finished
+                    if process.poll() is not None:
+                        logger.info(f"MidScene process finished with return code: {process.returncode}")
+                        break
+
+                    # Check for timeout
+                    if time.time() - start_time > timeout_seconds:
+                        if execution_completed:
+                            logger.info("MidScene execution completed but process still running (likely due to --keep-window), terminating gracefully")
+                            try:
+                                process.terminate()
+                                process.wait(timeout=10)
+                            except:
+                                process.kill()
+                            break
+                        else:
+                            logger.error(f"MidScene process timeout after {timeout_seconds} seconds without completion signal")
+                            try:
+                                process.terminate()
+                                process.wait(timeout=10)
+                            except:
+                                process.kill()
+                            raise subprocess.TimeoutExpired(command, timeout_seconds)
+
+                    # Read and display output
+                    try:
+                        while True:
+                            prefix, line = output_queue.get_nowait()
+                            if prefix == "STDOUT":
+                                all_stdout.append(line)
+                                logger.info(f"MidScene: {line}")
+
+                                # Check for execution completion signals
+                                if "Execution Summary:" in line:
+                                    logger.info("Detected MidScene execution summary - test execution completed")
+                                    execution_completed = True
+                                elif execution_completed and ("🎉 All files executed successfully!" in line or
+                                                            "❌ Some files failed to execute" in line or
+                                                            "⚠️ Some files were not executed" in line):
+                                    logger.info("MidScene execution fully completed, will terminate process after brief delay")
+                                    # Give a small delay to ensure all output is captured
+                                    time.sleep(2)
+                                    try:
+                                        process.terminate()
+                                        process.wait(timeout=10)
+                                    except:
+                                        process.kill()
+                                    break
+
+                            else:  # STDERR
+                                all_stderr.append(line)
+                                logger.warning(f"MidScene Error: {line}")
+                    except queue.Empty:
+                        pass
+
+                    time.sleep(0.1)  # Small delay to prevent busy waiting
+
+                # Collect any remaining output
+                try:
+                    while True:
+                        prefix, line = output_queue.get_nowait()
+                        if prefix == "STDOUT":
+                            all_stdout.append(line)
+                        else:
+                            all_stderr.append(line)
+                except queue.Empty:
+                    pass
+
+                # Wait for threads to finish
+                stdout_thread.join(timeout=1)
+                stderr_thread.join(timeout=1)
+
+                # Create a result-like object
+                class ProcessResult:
+                    def __init__(self, returncode, stdout, stderr):
+                        self.returncode = returncode
+                        self.stdout = '\n'.join(stdout)
+                        self.stderr = '\n'.join(stderr)
+
+                result = ProcessResult(
+                    process.returncode if process.returncode is not None else 0,
+                    all_stdout,
+                    all_stderr
                 )
 
                 if result.stdout:
@@ -211,10 +339,15 @@ class MidSceneItem(pytest.Item):
                     with allure.step("执行成功"):
                         allure.attach("测试通过", "结果", allure.attachment_type.TEXT)
 
-            except subprocess.TimeoutExpired:
+            except subprocess.TimeoutExpired as e:
+                # This should rarely happen now since we handle timeout in the main loop
                 with allure.step("执行超时"):
-                    allure.attach("Test timed out after 5 minutes", "错误", allure.attachment_type.TEXT)
-                pytest.fail("Test timed out after 5 minutes", pytrace=False)
+                    allure.attach(f"MidScene process timed out: {str(e)}", "错误", allure.attachment_type.TEXT)
+                pytest.fail(f"MidScene process timed out: {str(e)}", pytrace=False)
+            except Exception as e:
+                with allure.step("执行异常"):
+                    allure.attach(f"Unexpected error: {str(e)}", "错误", allure.attachment_type.TEXT)
+                pytest.fail(f"Unexpected error during MidScene execution: {str(e)}", pytrace=False)
 
     def repr_failure(self, excinfo):
         """Custom failure reporting"""
