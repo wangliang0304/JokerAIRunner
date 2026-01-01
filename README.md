@@ -105,25 +105,25 @@ python - m pytest .\testcases
 - 运行接口用例
 
 ```python
-python - m pytest .\testcases\api
+python -m pytest testcases/api/demo/requests_demo_test.py
 ```
 
 - 运行UI用例
 
 ```python
-python - m pytest .\testcases\UI
+python -m pytest testcases/UI/demo/test_midscene_web_demo.yaml
 ```
 
 兼容UI自动化的展示界面运行：
 ```python
 # Run in headed mode
-pytest testcases/UI --midscene-headed
+pytest testcases/UI/demo/test_midscene_web_demo.yaml --midscene-headed
 
 # Keep window open after test
-pytest testcases/UI --midscene-keep-window
+pytest testcases/UI/demo/test_midscene_web_demo.yaml --midscene-keep-window
 
 # Both options together
-pytest testcases/UI --midscene-headed --midscene-keep-window
+pytest testcases/UI/demo/test_midscene_web_demo.yaml --midscene-headed --midscene-keep-window
 ```
 
 

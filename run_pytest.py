@@ -56,7 +56,7 @@ def allure_report():
     # 补充支持多个case路径
     # case = [r"testcases/api/pp_app/airtime/agent_status_test.py", r"testcases/pp_app"]
     # api demo case 推荐
-    # case = [r"testcases/api/demo/requests_test.py"]
+    # case = [r"testcases/api/demo/requests_demo_test.py"]
     # UI demo case 推荐
     case = [r"testcases/UI/demo/test_web_joker_homepage.yaml"]
 

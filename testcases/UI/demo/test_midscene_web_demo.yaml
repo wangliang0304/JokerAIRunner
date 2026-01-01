@@ -1,0 +1,9 @@
+web:
+  url: https://www.bing.com
+
+tasks:
+  - name: 搜索天气
+    flow:
+      - ai: 搜索 "今日天气"
+      - sleep: 1000
+      - aiAssert: 结果显示天气信息

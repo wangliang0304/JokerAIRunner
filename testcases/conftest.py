@@ -188,7 +188,7 @@ class MidSceneItem(pytest.Item):
                 all_stdout = []
                 all_stderr = []
                 start_time = time.time()
-                timeout_seconds = 300  # 5 minutes should be enough for UI tests
+                timeout_seconds = 120  # 2 minutes should be enough for UI tests
                 execution_completed = False
 
                 logger.info("MidScene execution started, monitoring output...")
