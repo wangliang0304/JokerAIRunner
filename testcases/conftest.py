@@ -14,15 +14,35 @@ from datetime import datetime
 from common.get_token import write_token_to_yml
 from common.get_token_bussiness import write_bussiness_token_to_yml
 
-# 加载环境变量
-load_dotenv(".env")
+# 加载环境变量（指定编码以支持中文注释）
+# 尝试多个可能的路径
+env_paths = [
+    "/workspace/.env",  # Docker 容器中的路径
+    ".env",             # 相对路径
+    os.path.join(os.path.dirname(__file__), "../.env"),  # 项目根目录
+]
+
+loaded = False
+for env_path in env_paths:
+    if os.path.exists(env_path):
+        load_dotenv(env_path, encoding="utf-8", override=True)
+        loaded = True
+        logger.info(f"Loaded .env from: {env_path}")
+        break
+
+if not loaded:
+    logger.warning("No .env file found, using system environment variables only")
 
 
 @pytest.fixture(scope="session", autouse=True)
 def session_fixture(request):
     """setup and teardown each task"""
-    write_token_to_yml()
-    write_bussiness_token_to_yml()
+    # 检查是否在容器环境中运行
+    if os.environ.get("RUN_IN_DOCKER") != "true":
+        write_token_to_yml()
+        write_bussiness_token_to_yml()
+    else:
+        logger.info("Running in Docker environment, skipping token generation")
 
     yield
 

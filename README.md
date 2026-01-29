@@ -3,7 +3,7 @@
 
 https://mp.weixin.qq.com/s/tdZ5_VcKjCItgTgD7lfUPA
 
-- AI驱动的自动化。
+- AI驱动的~~自动化。
 - 配置即编程，配置即自动化。
 - 简便，却不简单。
 - 开源不易，纯粹！送给毕业季的朋友。
@@ -12,7 +12,7 @@ https://mp.weixin.qq.com/s/tdZ5_VcKjCItgTgD7lfUPA
 那么恭喜，你找到了一个适合你的自动化测试框架。
 
 ⭐ 每一个Star都是对创作者的鼓励，也是让更多人发现并受益于[JokerAIRunner]的机会 
-⭐ 今天你的支持，就是我们明天前进的动力
+⭐ 今天你的支持，就是我们~~明天前进的动力
 
 - api用例demo
 ```python

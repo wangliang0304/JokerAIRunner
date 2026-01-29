@@ -2,8 +2,8 @@ web:
   url: https://www.bing.com
 
 tasks:
-  - name: 搜索天气
+  - name: 搜索joker测试
     flow:
-      - ai: 搜索 "今日天气"
+      - ai: 搜索 "joker testor"
       - sleep: 1000
-      - aiAssert: 结果显示天气信息
+      - aiAssert: 结果显示joker相关信息
