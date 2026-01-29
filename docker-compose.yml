@@ -1,0 +1,73 @@
+services:
+  # ========================================
+  # 测试执行服务
+  # ========================================
+  jokerai-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: jokerai-runner:latest
+    container_name: jokerai-test-runner
+
+    # 环境变量
+    environment:
+      - MIDSCENE_HEADED=${MIDSCENE_HEADED:-false}
+      - MIDSCENE_KEEP_WINDOW=${MIDSCENE_KEEP_WINDOW:-false}
+      - MIDSCENE_TIMEOUT=${MIDSCENE_TIMEOUT:-120}
+      - BASE_URL=${BASE_URL:-https://api.example.com}
+      - TEST_ENV=${TEST_ENV:-development}
+      - PYTHONPATH=/workspace
+      - ALLURE_NO_CLEAN=1
+      # Docker 环境标识
+      - RUN_IN_DOCKER=true
+      # Puppeteer/Chromium 配置
+      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+      # MidScene 配置
+      - MIDSCENE_BROWSER_PATH=/usr/bin/chromium
+
+    # 卷挂载
+    volumes:
+      # 测试用例（外部挂载）
+      - ./testcases:/workspace/testcases:rw
+      # 配置文件
+      - ./.env:/workspace/.env:ro
+      - ./config:/workspace/config:rw
+      - ./debugtalk.py:/workspace/debugtalk.py:rw
+      - ./common:/workspace/common:rw
+      # 输出目录
+      - ./output/allure_result:/workspace/allure_result
+      - ./output/allure_report:/workspace/allure_report
+      - ./output/logs:/workspace/logs
+      - ./output/midscene_run:/workspace/midscene_run
+
+    # 共享内存（Chrome 需要）
+    shm_size: 2gb
+
+    # 资源限制
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+
+    # 网络
+    networks:
+      - test-network
+
+    # 命令（保持容器运行）
+    # 移除固定命令，让容器保持运行，方便随时进入执行测试
+    command: ["/bin/bash", "-c", "sleep infinity"]
+
+# ========================================
+# 网络配置
+# ========================================
+networks:
+  test-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
